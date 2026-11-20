@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>free robux</title>
+</head>
+<body>
+<h1>FREE ROBUX</h1>
+<p>jak klikniesz dostaniesz free robux.</p>
+<button onclick="checkIP()">free robux</button>
+<p id="result"></p>
+
+<script>
+async function checkIP() {
+  const result = document.getElementById("result");
+  result.textContent = "Sprawdzanie...";
+  try {
+    const response = await fetch("https://api.ipify.org?format=json");
+    const data = await response.json();
+    result.textContent = "Twoje publiczne IP: " + data.ip;
+  } catch {
+    result.textContent = "Nie udało się sprawdzić IP.";
+  }
+}
+</script>
+</body>
+</html>
