@@ -1,27 +1,122 @@
+
 <!DOCTYPE html>
 <html lang="pl">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>free robux</title>
+<title>OSINT Bot - Test IP</title>
+
+<style>
+body {
+    background: #10131c;
+    color: white;
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+}
+
+.card {
+    background: #1c2230;
+    padding: 30px;
+    border-radius: 16px;
+    width: 320px;
+    text-align: center;
+    box-shadow: 0 8px 30px #0008;
+}
+
+h1 { color: #65a5ff; }
+
+p { color: #c5ccda; line-height: 1.5; }
+
+button {
+    width: 100%;
+    padding: 13px;
+    margin-top: 12px;
+    border: 0;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 15px;
+}
+
+#agree { background: #3478f6; color: white; }
+#cancel { background: #343c4d; color: white; }
+#copy { background: #23865b; color: white; }
+
+#result {
+    margin-top: 20px;
+    overflow-wrap: anywhere;
+    font-weight: bold;
+}
+</style>
 </head>
+
 <body>
-<h1>FREE ROBUX</h1>
-<p>jak klikniesz dostaniesz free robux.</p>
-<button onclick="checkIP()">free robux</button>
-<p id="result"></p>
+<div class="card">
+    <h1>OSINT IP TEST</h1>
+
+    <p>
+        Ta strona może sprawdzić Twój publiczny adres IP.
+        Po kliknięciu zgody adres zostanie pobrany
+        z zewnętrznej usługi i wyświetlony tylko Tobie.
+        Nie jest wysyłany do naszego bota ani zapisywany przez tę stronę.
+    </p>
+
+    <button id="agree" onclick="checkIP()">
+        Wyrażam zgodę
+    </button>
+
+    <button id="cancel" onclick="cancelTest()">
+        Anuluj
+    </button>
+
+    <div id="result"></div>
+
+    <button id="copy" hidden onclick="copyIP()">
+        Kopiuj moje IP
+    </button>
+</div>
 
 <script>
+let myIP = "";
+
 async function checkIP() {
-  const result = document.getElementById("result");
-  result.textContent = "Sprawdzanie...";
-  try {
-    const response = await fetch("https://api.ipify.org?format=json");
-    const data = await response.json();
-    result.textContent = "Twoje publiczne IP: " + data.ip;
-  } catch {
-    result.textContent = "Nie udało się sprawdzić IP.";
-  }
+    const result = document.getElementById("result");
+    result.textContent = "Sprawdzanie...";
+
+    try {
+        const response = await fetch(
+            "https://api.ipify.org?format=json"
+        );
+
+        if (!response.ok) throw new Error();
+
+        const data = await response.json();
+        myIP = data.ip;
+
+        result.textContent = "Twoje publiczne IP: " + myIP;
+        document.getElementById("copy").hidden = false;
+
+    } catch {
+        result.textContent = "Nie udało się sprawdzić IP.";
+    }
+}
+
+function cancelTest() {
+    myIP = "";
+    document.getElementById("result").textContent =
+        "Test anulowany.";
+    document.getElementById("copy").hidden = true;
+}
+
+async function copyIP() {
+    if (!myIP) return;
+
+    await navigator.clipboard.writeText(myIP);
+    document.getElementById("result").textContent =
+        "IP skopiowane!";
 }
 </script>
 </body>
